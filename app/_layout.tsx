@@ -1,4 +1,3 @@
-import { View, Text } from 'react-native';
 import React, { useEffect } from 'react';
 import { ClerkProvider, useAuth } from '@clerk/clerk-expo';
 import * as SecureStore from 'expo-secure-store';
@@ -22,7 +21,7 @@ const tokenCache = {
 };
 
 const InitialLayout = () => {
-    const { isLoaded, isSignedIn } = useAuth();
+    const { isSignedIn } = useAuth();
     useEffect(() => {
         console.log('clerk key', process.env.EXPO_PUBLIC_CLERK_PUBLISHABLE_KEY);
         console.log('isSignedIn', isSignedIn);
