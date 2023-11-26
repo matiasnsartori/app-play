@@ -1,24 +1,11 @@
-import { Link } from 'expo-router';
-import * as React from 'react';
-import { Text, View, StyleSheet, Pressable, SafeAreaView } from 'react-native';
-import { ClerkProvider } from '@clerk/clerk-expo';
-import Constants from 'expo-constants';
+import { ActivityIndicator, View } from 'react-native';
 
-interface AppProps {}
-
-const App = (props: AppProps) => {
+const StartPage = () => {
     return (
-        <SafeAreaView style={styles.container}>
-            <Text>Hello world!</Text>
-            <Link href={'./signUp'}>
-                <Text>Sign Up</Text>
-            </Link>
-        </SafeAreaView>
+        <View style={{ flex: 1, justifyContent: 'center' }}>
+            <ActivityIndicator size="large" color="#075B9E" />
+        </View>
     );
 };
 
-export default App;
-
-const styles = StyleSheet.create({
-    container: {}
-});
+export default StartPage;

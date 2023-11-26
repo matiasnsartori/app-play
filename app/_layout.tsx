@@ -1,7 +1,33 @@
-import React, { useEffect } from 'react';
 import { ClerkProvider, useAuth } from '@clerk/clerk-expo';
+import { Slot, useRouter, useSegments } from 'expo-router';
+import { useEffect } from 'react';
+import { DefaultTheme, PaperProvider } from 'react-native-paper';
 import * as SecureStore from 'expo-secure-store';
-import { Slot } from 'expo-router';
+import { theme } from '../constants';
+
+const InitialLayout = () => {
+    const { isLoaded, isSignedIn } = useAuth();
+    const segments = useSegments();
+    const router = useRouter();
+
+    useEffect(() => {
+        if (!isLoaded) return;
+
+        const inTabsGroup = segments[0] === '(auth)';
+
+        console.log('Segments: ', segments);
+
+        console.log('User changed: ', isSignedIn);
+
+        if (isSignedIn && !inTabsGroup) {
+            router.replace('/home');
+        } else if (!isSignedIn) {
+            router.replace('/login');
+        }
+    }, [isSignedIn]);
+
+    return <Slot />;
+};
 
 const tokenCache = {
     async getToken(key: string) {
@@ -20,25 +46,17 @@ const tokenCache = {
     }
 };
 
-const InitialLayout = () => {
-    const { isSignedIn } = useAuth();
-    useEffect(() => {
-        console.log('clerk key', process.env.EXPO_PUBLIC_CLERK_PUBLISHABLE_KEY);
-        console.log('isSignedIn', isSignedIn);
-    }, [isSignedIn]);
-
-    return <Slot />;
-};
-
-const AppLayout = () => {
+const RootLayout = () => {
     return (
         <ClerkProvider
-            tokenCache={tokenCache}
             publishableKey={process.env.EXPO_PUBLIC_CLERK_PUBLISHABLE_KEY!}
+            tokenCache={tokenCache}
         >
-            <InitialLayout />
+            <PaperProvider theme={theme}>
+                <InitialLayout />
+            </PaperProvider>
         </ClerkProvider>
     );
 };
 
-export default AppLayout;
+export default RootLayout;
